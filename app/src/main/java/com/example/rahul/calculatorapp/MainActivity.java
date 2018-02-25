@@ -17,13 +17,14 @@ public class MainActivity extends AppCompatActivity {
     // op1 - operand 1
     // op2 - operand 2
     // opbackup - take backup of the result of the operation between op1 and op2
-    private int operation = 0, textFlag = 1, startFlag = 1, equationFlag = 0;
+    private int operation = 0, textFlag = 1, startFlag = 1, equationFlag = 0, equalsFlag = 0;
     // FLAGS
     //      operation - shows the type of operation that the user is performing
     //      textFlag - specifies whether the user is in typing mod (entering input numbers) or entering operations
     //      startFlag - specifies whether the user started adding numbers as part of the input or not (initially startFlag = 1 but as the user
     //                  starts entering numbers, it changes to 0)
     //      equationFlag - detects whether the operation is over or not (distinguishes between two different operations)
+    //      equalsFlag - for continuous operation using equals button
     private Double result;
     private String temp;
 
@@ -361,7 +362,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1) {
-                    op2 = Double.parseDouble(screen.getText().toString());
+
+                    if(equalsFlag == 0)
+                        op2 = Double.parseDouble(screen.getText().toString());
 
                     // get the operand 2 and then detect the type of operation
                     if (operation == 1)
@@ -396,10 +399,10 @@ public class MainActivity extends AppCompatActivity {
                     division.setBackgroundResource(R.drawable.round_button2);
 
                     // reset flags
-                    opbackup = 0;
                     textFlag = 0;
                     equationFlag = 0;
                     startFlag = 1;
+                    equalsFlag = 1;
                 }
                 else{
                     Toast.makeText(MainActivity.this,"Please enter an operand first" , Toast.LENGTH_SHORT).show();
@@ -413,6 +416,8 @@ public class MainActivity extends AppCompatActivity {
     // number keys
     public void updateDisplay(View view){
 
+        equalsFlag = 0;
+
         // enable buttons
         plus.setEnabled(true);
         minus.setEnabled(true);
@@ -421,6 +426,10 @@ public class MainActivity extends AppCompatActivity {
         equals.setEnabled(true);
         sqrt.setEnabled(true);
         sign.setEnabled(true);
+        plus.setBackgroundResource(R.drawable.round_button2);
+        minus.setBackgroundResource(R.drawable.round_button2);
+        multiply.setBackgroundResource(R.drawable.round_button2);
+        division.setBackgroundResource(R.drawable.round_button2);
 
         // if new operation, then clear the keyboard contents
         if(textFlag == 1 || startFlag == 1){
