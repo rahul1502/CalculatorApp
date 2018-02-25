@@ -14,7 +14,16 @@ public class MainActivity extends AppCompatActivity {
     private EditText screen;
     private Button ac, sign, sqrt, division, multiply, minus, plus, clear, equals, point;
     private double op1 = 0, op2 = 0, opbackup;
+    // op1 - operand 1
+    // op2 - operand 2
+    // opbackup - take backup of the result of the operation between op1 and op2
     private int operation = 0, textFlag = 1, startFlag = 1, equationFlag = 0;
+    // FLAGS
+    //      operation - shows the type of operation that the user is performing
+    //      textFlag - specifies whether the user is in typing mod (entering input numbers) or entering operations
+    //      startFlag - specifies whether the user started adding numbers as part of the input or not (initially startFlag = 1 but as the user
+    //                  starts entering numbers, it changes to 0)
+    //      equationFlag - detects whether the operation is over or not (distinguishes between two different operations)
     private Double result;
     private String temp;
 
@@ -25,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // initialize the views
         screen = (EditText)findViewById(R.id.screen);
         ac = (Button)findViewById(R.id.ac);
         sign = (Button)findViewById(R.id.sign);
@@ -37,16 +47,19 @@ public class MainActivity extends AppCompatActivity {
         equals = (Button)findViewById(R.id.equals);
         point = (Button)findViewById(R.id.point);
 
+        // set 0 initially on the screen
         screen.setText("0");
 
-
+        // + or - sign of the operand
         sign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (textFlag != 1){
+                    // if no '-' sign in front of the operand then add '-' sign
                     if (screen.getText().toString().charAt(0) != '-')
                         screen.setText("-" + screen.getText().toString());
                     else {
+                        // if already there is a '-' sign in front of the operand, then remove it
                         temp = screen.getText().toString();
                         temp = temp.replace("-", "");
                         screen.setText(temp);
@@ -56,13 +69,17 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,"Enter a number before setting up the sign(+/-)" , Toast.LENGTH_SHORT).show();
             }
         });
+
+        // add decimal point
         point.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // check if there is already one decimal point in the operand
                 if (screen.getText().toString().indexOf('.') == -1) {
                     if (textFlag == 1 || startFlag == 1) {
                         screen.setText("");
                     }
+                    // add decimal point in the operand
                     screen.setText(screen.getText().toString() + ".");
                     startFlag = 0;
                     textFlag = 0;
@@ -75,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // set all the flags to their default values
+        // enable all the buttons
         ac.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,17 +122,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1) {
+                    // disable all the button except the main operation button
                     minus.setEnabled(false);
                     multiply.setEnabled(false);
                     division.setEnabled(false);
                     equals.setEnabled(false);
                     sqrt.setEnabled(false);
                     sign.setEnabled(false);
+                    // change the color of the main operation button
                     plus.setBackgroundResource(R.drawable.when_pressed);
                     minus.setBackgroundResource(R.drawable.round_button2);
                     multiply.setBackgroundResource(R.drawable.round_button2);
                     division.setBackgroundResource(R.drawable.round_button2);
 
+                    // if equation is not continue
                     if(equationFlag == 0) {
                         operation = 1;
                         op1 = Double.parseDouble(screen.getText().toString());
@@ -121,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         screen.setText("");
                         equationFlag = 1;
                     }
-                    else{
+                    else{ // if equation is continue
                         op2 = Double.parseDouble(screen.getText().toString());
                         if(operation==1)
                             result = opbackup + op2;
@@ -133,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
                             result = opbackup / op2;
 
                         opbackup = result;
+
+                        // only show first 10 digits
                         if(result.toString().length() > 10)
                             screen.setText(result.toString().substring(0,10));
                         else
@@ -151,25 +175,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1)  {
+                    // disable all the button except the main operation button
                     plus.setEnabled(false);
                     multiply.setEnabled(false);
                     division.setEnabled(false);
                     equals.setEnabled(false);
                     sqrt.setEnabled(false);
                     sign.setEnabled(false);
+                    // change the color of the main operation button
                     minus.setBackgroundResource(R.drawable.when_pressed);
                     plus.setBackgroundResource(R.drawable.round_button2);
                     multiply.setBackgroundResource(R.drawable.round_button2);
                     division.setBackgroundResource(R.drawable.round_button2);
 
-                    if(equationFlag == 0) {
+                    if(equationFlag == 0) { // if equation is not continue
                         operation = 2;
                         op1 = Double.parseDouble(screen.getText().toString());
                         opbackup = op1;
                         screen.setText("");
                         equationFlag = 1;
                     }
-                    else{
+                    else{ // if equation is continue
                         op2 = Double.parseDouble(screen.getText().toString());
                         if(operation==1)
                             result = opbackup + op2;
@@ -180,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
                         else if(operation==4)
                             result = opbackup / op2;
                         opbackup = result;
+                        // only show first 10 digits
                         if(result.toString().length() > 10)
                             screen.setText(result.toString().substring(0,10));
                         else
@@ -200,25 +227,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1) {
+                    // disable all the button except the main operation button
                     plus.setEnabled(false);
                     minus.setEnabled(false);
                     division.setEnabled(false);
                     equals.setEnabled(false);
                     sqrt.setEnabled(false);
                     sign.setEnabled(false);
+                    // change the color of the main operation button
                     multiply.setBackgroundResource(R.drawable.when_pressed);
                     plus.setBackgroundResource(R.drawable.round_button2);
                     minus.setBackgroundResource(R.drawable.round_button2);
                     division.setBackgroundResource(R.drawable.round_button2);
 
-                    if(equationFlag == 0) {
+                    if(equationFlag == 0) { // if equation is not continue
                         operation = 3;
                         op1 = Double.parseDouble(screen.getText().toString());
                         opbackup = op1;
                         screen.setText("");
                         equationFlag = 1;
                     }
-                    else{
+                    else{ // if equation is continue
                         op2 = Double.parseDouble(screen.getText().toString());
                         if(operation==1)
                             result = opbackup + op2;
@@ -229,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
                         else if(operation==4)
                             result = opbackup / op2;
                         opbackup = result;
+                        // only show first 10 digits
                         if(result.toString().length() > 10)
                             screen.setText(result.toString().substring(0,10));
                         else
@@ -249,25 +279,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1){
+                    // disable all the button except the main operation button
                     plus.setEnabled(false);
                     minus.setEnabled(false);
                     multiply.setEnabled(false);
                     equals.setEnabled(false);
                     sqrt.setEnabled(false);
                     sign.setEnabled(false);
+                    // change the color of the main operation button
                     division.setBackgroundResource(R.drawable.when_pressed);
                     plus.setBackgroundResource(R.drawable.round_button2);
                     minus.setBackgroundResource(R.drawable.round_button2);
                     multiply.setBackgroundResource(R.drawable.round_button2);
 
-                    if(equationFlag == 0) {
+                    if(equationFlag == 0) { // if equation is not continue
                         operation = 4;
                         op1 = Double.parseDouble(screen.getText().toString());
                         opbackup = op1;
                         screen.setText("");
                         equationFlag = 1;
                     }
-                    else{
+                    else{ // if equation is continue
                         op2 = Double.parseDouble(screen.getText().toString());
                         if(operation==1)
                             result = opbackup + op2;
@@ -278,6 +310,7 @@ public class MainActivity extends AppCompatActivity {
                         else if(operation==4)
                             result = opbackup / op2;
                         opbackup = result;
+                        // only show first 10 digits
                         if(result.toString().length() > 10)
                             screen.setText(result.toString().substring(0,10));
                         else
@@ -292,12 +325,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // square root
         sqrt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1) {
                     op1 = Double.parseDouble(screen.getText().toString());
                     result = Math.sqrt(op1);
+                    // only show first 10 digits
                     if(result.toString().length() > 10)
                         screen.setText(result.toString().substring(0,10));
                     else
@@ -309,6 +345,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // only clear temporary flags
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -317,11 +355,15 @@ public class MainActivity extends AppCompatActivity {
                 screen.setText("0");
             }
         });
+
+        // =
         equals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(textFlag != 1) {
                     op2 = Double.parseDouble(screen.getText().toString());
+
+                    // get the operand 2 and then detect the type of operation
                     if (operation == 1)
                         result = opbackup + op2;
                     else if (operation == 2)
@@ -333,11 +375,14 @@ public class MainActivity extends AppCompatActivity {
 
                     opbackup = result;
 
+                    // only show first 10 digits
                     if(result.toString().length() > 10)
                         screen.setText(result.toString().substring(0,10));
                     else
                         screen.setText(result.toString());
 
+
+                    // enable all the buttons
                     plus.setEnabled(true);
                     minus.setEnabled(true);
                     multiply.setEnabled(true);
@@ -350,6 +395,7 @@ public class MainActivity extends AppCompatActivity {
                     multiply.setBackgroundResource(R.drawable.round_button2);
                     division.setBackgroundResource(R.drawable.round_button2);
 
+                    // reset flags
                     opbackup = 0;
                     textFlag = 0;
                     equationFlag = 0;
@@ -363,8 +409,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    // number keys
     public void updateDisplay(View view){
 
+        // enable buttons
         plus.setEnabled(true);
         minus.setEnabled(true);
         multiply.setEnabled(true);
@@ -373,9 +422,11 @@ public class MainActivity extends AppCompatActivity {
         sqrt.setEnabled(true);
         sign.setEnabled(true);
 
+        // if new operation, then clear the keyboard contents
         if(textFlag == 1 || startFlag == 1){
             screen.setText("");
         }
+        // write the number on the screen
         screen.setText(screen.getText().toString() + ((Button)view).getText());
         textFlag = 0;
         startFlag = 0;
